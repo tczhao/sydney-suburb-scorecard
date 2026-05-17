@@ -49,9 +49,6 @@
         <calculation class='tableau' formula='[centroid_lon]' />
       </column>
 
-      <!-- Friendly aliases -->
-      <aliases enabled='yes' />
-
       <!-- ============================================================ -->
       <!-- PARAMETERS: 4 weight sliders (0..1 step 0.05) for the persona -->
       <!-- ============================================================ -->
@@ -93,6 +90,4 @@
       </column>
     </datasource>
   </datasources>
-  <worksheets />
-  <windows source-height='30' />
 </workbook>
