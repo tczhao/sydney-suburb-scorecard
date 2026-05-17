@@ -4,7 +4,10 @@ A persona-weighted composite score that turns the ~700+ suburbs of Greater
 Sydney into a ranked shortlist for a first-home-buyer. Built solo on
 public-only data sources (ABS, NSW Valuer General, BOCSAR).
 
-> **Live dashboard:** _(Tableau Public link goes here once published)_
+> **Live dashboards:**
+> - Streamlit Community Cloud: _(URL after first deploy — see Deploying below)_
+> - Tableau Public: _(URL after first publish — see Deploying below)_
+>
 > **Persona:** Sam & Priya — $1.2M budget, dual income, WFH 3 days, planning kids in ~3 years.
 > **Headline number:** narrows ~700 candidate suburbs to a ranked top-5 in one view.
 
@@ -60,6 +63,31 @@ python etl/06_build_fact.py            # writes tableau/suburb_scores.csv
 Open `tableau/suburb_scores.csv` in Tableau Desktop Public Edition to
 rebuild the dashboard (see Phase 4 in the project plan).
 
+## Deploying
+
+### Option A — Streamlit Community Cloud (fully scripted)
+
+1. Push this repo to GitHub (you already have the remote configured).
+2. Sign in to https://share.streamlit.io with your GitHub account.
+3. **New app** → pick this repo → main branch → main file path `streamlit_app.py` → **Deploy**.
+4. Streamlit Cloud installs `requirements.txt` and exposes the app at `https://<user>-sydney-suburb-scorecard-streamlit-app.streamlit.app` (URL pattern varies). Copy the link back into this README.
+
+To run locally first:
+
+```bash
+source .venv/Scripts/activate
+streamlit run streamlit_app.py
+```
+
+### Option B — Tableau Public (the AU BA portfolio signal)
+
+1. Install [Tableau Desktop Public Edition](https://www.tableau.com/products/public/download) (free).
+2. Open `tableau/sydney_scorecard.twb`. The data source, geographic roles, 4 weight parameters and 4 calculated fields are pre-wired.
+3. Follow [`tableau/BUILD_SHEETS.md`](tableau/BUILD_SHEETS.md) — Map sheet + Top Suburbs table + Dashboard. ~15 minutes of drag-drop.
+4. `File → Save to Tableau Public As…` → sign in to your Tableau Public account → publish. Paste the public URL back into this README.
+
+If the pre-wired `.twb` fails to open cleanly, the same BUILD_SHEETS.md file documents how to build everything from scratch in Tableau (~30 minutes).
+
 ## Project structure
 
 ```
@@ -76,7 +104,10 @@ rebuild the dashboard (see Phase 4 in the project plan).
 │   ├── 05_commute_proxy.py
 │   └── 06_build_fact.py
 ├── tableau/
-│   └── suburb_scores.csv       # 24 cols × 741 rows; Tableau input
+│   ├── suburb_scores.csv       # 24 cols × 741 rows; Tableau/Streamlit input
+│   ├── sydney_scorecard.twb    # pre-wired params + calc fields
+│   └── BUILD_SHEETS.md         # drag-drop steps to finish the workbook
+├── streamlit_app.py            # one-file Streamlit dashboard
 ├── data/raw/                   # gitignored; populated by 00_download_raw.py
 ├── sydney_scorecard.duckdb     # gitignored; built by the ETL
 ├── requirements.txt

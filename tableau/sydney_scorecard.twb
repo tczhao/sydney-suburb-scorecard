@@ -1,0 +1,98 @@
+<?xml version='1.0' encoding='utf-8' ?>
+<workbook source-build='2024.3.0' source-platform='win' version='18.1' xmlns:user='http://www.tableausoftware.com/xml/user'>
+  <preferences>
+    <preference name='ui.encoding.shelf.height' value='250' />
+  </preferences>
+  <datasources>
+    <datasource caption='suburb_scores' inline='true' name='federated.suburb_scores' version='18.1'>
+      <connection class='federated'>
+        <named-connections>
+          <named-connection caption='suburb_scores' name='textscan.suburb_scores'>
+            <connection class='textscan' directory='.' filename='suburb_scores.csv' password='' server='' />
+          </named-connection>
+        </named-connections>
+        <relation connection='textscan.suburb_scores' name='suburb_scores.csv' table='[suburb_scores#csv]' type='table'>
+          <columns header='yes' outcome='6'>
+            <column datatype='string' name='suburb_id' ordinal='0' />
+            <column datatype='string' name='suburb_name' ordinal='1' />
+            <column datatype='real' name='centroid_lat' ordinal='2' />
+            <column datatype='real' name='centroid_lon' ordinal='3' />
+            <column datatype='real' name='area_sqkm' ordinal='4' />
+            <column datatype='integer' name='total_pop' ordinal='5' />
+            <column datatype='integer' name='median_hhd_inc_weekly' ordinal='6' />
+            <column datatype='integer' name='median_rent_weekly' ordinal='7' />
+            <column datatype='integer' name='median_age' ordinal='8' />
+            <column datatype='real' name='median_sale_price_12m' ordinal='9' />
+            <column datatype='integer' name='n_sales_12m' ordinal='10' />
+            <column datatype='real' name='price_5yr_cagr' ordinal='11' />
+            <column datatype='integer' name='offences_12mo' ordinal='12' />
+            <column datatype='real' name='crime_per_1000' ordinal='13' />
+            <column datatype='real' name='distance_km' ordinal='14' />
+            <column datatype='real' name='commute_minutes_cbd' ordinal='15' />
+            <column datatype='real' name='affordability_raw' ordinal='16' />
+            <column datatype='real' name='commute_raw' ordinal='17' />
+            <column datatype='real' name='growth_raw' ordinal='18' />
+            <column datatype='real' name='lifestyle_raw' ordinal='19' />
+            <column datatype='real' name='affordability_norm' ordinal='20' />
+            <column datatype='real' name='commute_norm' ordinal='21' />
+            <column datatype='real' name='lifestyle_norm' ordinal='22' />
+            <column datatype='real' name='growth_norm' ordinal='23' />
+          </columns>
+        </relation>
+      </connection>
+
+      <!-- Geographic role assignments for the map -->
+      <column datatype='real' name='[centroid_lat]' role='measure' type='quantitative' semantic-role='[Country].[Latitude]'>
+        <calculation class='tableau' formula='[centroid_lat]' />
+      </column>
+      <column datatype='real' name='[centroid_lon]' role='measure' type='quantitative' semantic-role='[Country].[Longitude]'>
+        <calculation class='tableau' formula='[centroid_lon]' />
+      </column>
+
+      <!-- Friendly aliases -->
+      <aliases enabled='yes' />
+
+      <!-- ============================================================ -->
+      <!-- PARAMETERS: 4 weight sliders (0..1 step 0.05) for the persona -->
+      <!-- ============================================================ -->
+      <column caption='w_aff' datatype='real' default-format='#,##0.00' name='[Parameter 1]' param-domain-type='range' role='measure' type='quantitative' value='0.35'>
+        <calculation class='tableau' formula='0.350000' />
+        <range granularity='0.050000' max='1.000000' min='0.000000' />
+      </column>
+      <column caption='w_com' datatype='real' default-format='#,##0.00' name='[Parameter 2]' param-domain-type='range' role='measure' type='quantitative' value='0.20'>
+        <calculation class='tableau' formula='0.200000' />
+        <range granularity='0.050000' max='1.000000' min='0.000000' />
+      </column>
+      <column caption='w_lif' datatype='real' default-format='#,##0.00' name='[Parameter 3]' param-domain-type='range' role='measure' type='quantitative' value='0.25'>
+        <calculation class='tableau' formula='0.250000' />
+        <range granularity='0.050000' max='1.000000' min='0.000000' />
+      </column>
+      <column caption='w_gro' datatype='real' default-format='#,##0.00' name='[Parameter 4]' param-domain-type='range' role='measure' type='quantitative' value='0.20'>
+        <calculation class='tableau' formula='0.200000' />
+        <range granularity='0.050000' max='1.000000' min='0.000000' />
+      </column>
+
+      <!-- ================================================================ -->
+      <!-- CALCULATED FIELDS                                                 -->
+      <!-- These reference parameters by their caption: [w_aff] etc          -->
+      <!-- ================================================================ -->
+      <column caption='Weight Sum' datatype='real' name='[Calculation_weightsum]' role='measure' type='quantitative'>
+        <calculation class='tableau' formula='[w_aff] + [w_com] + [w_lif] + [w_gro]' />
+      </column>
+
+      <column caption='Composite Score' datatype='real' name='[Calculation_composite]' role='measure' type='quantitative'>
+        <calculation class='tableau' formula='(  [w_aff] * AVG([affordability_norm])&#13;&#10; + [w_com] * AVG([commute_norm])&#13;&#10; + [w_lif] * AVG([lifestyle_norm])&#13;&#10; + [w_gro] * AVG([growth_norm])&#13;&#10;) / ([w_aff] + [w_com] + [w_lif] + [w_gro])' />
+      </column>
+
+      <column caption='Rank' datatype='integer' name='[Calculation_rank]' role='measure' type='quantitative'>
+        <calculation class='tableau' formula='RANK([Composite Score], &apos;desc&apos;)' />
+      </column>
+
+      <column caption='Under Budget Flag' datatype='boolean' name='[Calculation_underbudget]' role='dimension' type='nominal'>
+        <calculation class='tableau' formula='[median_sale_price_12m] &lt;= 1200000' />
+      </column>
+    </datasource>
+  </datasources>
+  <worksheets />
+  <windows source-height='30' />
+</workbook>
