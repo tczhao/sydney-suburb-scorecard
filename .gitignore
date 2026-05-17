@@ -1,0 +1,21 @@
+# Python
+.venv/
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+
+# Local data and secrets
+data/raw/
+.env
+
+# DuckDB
+*.duckdb
+*.duckdb.wal
+
+# Tableau scratch
+*.twb.bak
+Book*.twb*
+
+# OS
+.DS_Store
+Thumbs.db
