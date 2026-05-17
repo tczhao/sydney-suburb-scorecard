@@ -41,14 +41,6 @@
         </relation>
       </connection>
 
-      <!-- Geographic role assignments for the map -->
-      <column datatype='real' name='[centroid_lat]' role='measure' type='quantitative' semantic-role='[Country].[Latitude]'>
-        <calculation class='tableau' formula='[centroid_lat]' />
-      </column>
-      <column datatype='real' name='[centroid_lon]' role='measure' type='quantitative' semantic-role='[Country].[Longitude]'>
-        <calculation class='tableau' formula='[centroid_lon]' />
-      </column>
-
       <!-- ============================================================ -->
       <!-- PARAMETERS: 4 weight sliders (0..1 step 0.05) for the persona -->
       <!-- ============================================================ -->
