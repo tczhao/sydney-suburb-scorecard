@@ -4,14 +4,20 @@ A persona-weighted composite score that turns the ~700+ suburbs of Greater
 Sydney into a ranked shortlist for a first-home-buyer. Built solo on
 public-only data sources (ABS, NSW Valuer General, BOCSAR).
 
-> **Live dashboards:**
-> - Streamlit Community Cloud: _(URL after first deploy — see Deploying below)_
-> - Tableau Public: _(URL after first publish — see Deploying below)_
+> **Live dashboard:** https://sydney-suburb-scorecard-qcpvzsgu2vbh7sbkwldq2m.streamlit.app/
+>
+> Built in Python (pandas + DuckDB) and Streamlit; deployed on Streamlit Community Cloud. Drag the four weight sliders on the left to re-weight the composite score and watch the map + top-20 table update live.
+>
+> _Tableau Public publish was attempted but hit Tableau Desktop schema rejections; deferred to v2._
 >
 > **Persona:** Sam & Priya — $1.2M budget, dual income, WFH 3 days, planning kids in ~3 years.
 > **Headline number:** narrows ~700 candidate suburbs to a ranked top-5 in one view.
 
 ---
+
+## Executive summary
+
+See [`docs/exec_summary.md`](docs/exec_summary.md) for the one-page recommendation. **TL;DR:** at the persona's default weights the top picks skew to unit-heavy SW Sydney, which doesn't fit a "planning kids in 3 yrs" horizon. Move the lifestyle slider to ~50% and Lane Cove North + Meadowbank surface as the recommendation. The point of the dashboard is to make that trade-off visible.
 
 ## What's in the box
 
